@@ -6,7 +6,7 @@
 + C／C++插件
 + Child Processes 子进程
 + Cluster 集群
-+ CLI 命令行选项
++ [CLI 命令行选项](https://github.com/pavilion2t/LearningNode/blob/master/CLI/cli.md)
 + Console 控制台
 + Crypto 加密
 + Debugger 调试器
