@@ -1,7 +1,7 @@
 目录
 ======
 + [Example 例子](https://github.com/pavilion2t/LearningNode/blob/master/Example/hellozhuting.js) 
-+ Assert  断言  
++ Assert  断言：为应用程序的单元测试添加断言处理  
 + Buffer
 + C／C++插件
 + Child Processes 子进程
