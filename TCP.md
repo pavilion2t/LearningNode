@@ -5,7 +5,7 @@
   var server = net.createServer(option,connectListener);
   ``   
   
-  # 创建一个TCP客户端  
+ # 创建一个TCP客户端  
   在Node中，创建TCP客户端是一件非常简单的事情。只需要创建一个用于连接TCP服务器的socket端口对象即可：  
   ``  
   var net = net.Socket(options);
