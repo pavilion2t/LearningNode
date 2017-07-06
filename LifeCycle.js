@@ -110,3 +110,5 @@ ReactDom.render(
     <Container></Container>,
     document.getElementById('container')
 );
+
+//clone from [http://www.jianshu.com/p/4784216b8194]
