@@ -117,7 +117,7 @@
 		});
 		socket.emit('login',userName);
 		document.getElementById("send").disabled = "";
-	    document.getElementById("logout").disabled = "";
+	        document.getElementById("logout").disabled = "";
 		document.getElementById("login").disabled = true;
 	}
 
@@ -142,8 +142,8 @@
 		document.getElementById("login").disabled = "";
 	}
 	function window_onunload(){
-       socket.emit('logout',userName);
-       socket.disconnet();
+          socket.emit('logout',userName);
+          socket.disconnet();
 	}
 
 </script>
