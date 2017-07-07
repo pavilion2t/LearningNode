@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Socket.IO</title>
+</head>
+<body onload="window_onload()" onunload="window_onunload()">
+  <h1>Socket.Io</h1>
+
+  <div id="container">
+  	<table id="tbDlg" border="0" cellpadding="3" cellspacing="0" width="100%">
+  	  <tr id="tbDlg">
+  	  	<td id="tdDlg" width="5">
+  	  		用户名：
+  	  		<input id="tbxUsername" type="text" value="游客">
+  	  		<input id="btnLogin" type="button" value="登录" onclick="login()">
+  	  		<input id="btnLogout" type="button" value="退出" onclick="logout()">  	 
+  	  		</td>
+  	  </tr>
+  	</table>
+  </div>
+
+  <div id="divLeft">
+    <div id="divchat"></div>
+    <div id="container3">
+    	<table id="tbDlg" border="0" cellpadding="3" cellspacing="0">
+    	  <tr id="trDlg">
+    	  	<td valign="top" id="tdDlg" nowrap>对话</td>
+    	  	<td valign="top" id="tdDlg">
+    	  		<textarea id="tbxMsg" cols="255" rows="5" style="width:100%"></textarea>
+    	  	</td>
+    	  	<td valign="top" id="tdDlg">
+    	  		<input type="button" value="发送" disabled onclick="send()">
+    	  	</td>
+    	  </tr>	
+    	</table>
+    </div>
+
+    <div id="divRight">用户列表</div>
+  	
+  </div>
+</body>
+<style type="text/css">
+	#divLeft{
+		width:85%;
+		background-color: #f0f0f0;
+		float: left;
+	}
+	#divRight{
+		width:15%;
+		background-color: #ffb6c1;
+		float: right;
+	}
+
+</style>
+
+<script type="text/javascript">
+	var userName,socket,tbxUsername,tbxMsg,divChat;
+	function window_onload(){
+		divChat = document.getElementById('divchat');
+		tbxUsername = document.getElementById('tbxUsername');
+		tbxMsg = document.getElementById('tbxMsg');
+		tbxUsername.focus();
+		tbxUsername.select();
+	}
+
+	function AddMsg(msg){
+        divChat.innerHTML+=msg + '<br/>';
+        if(divChat.scrollHeight>divChat.clientHeight){
+        	divChat.scrollTop=divChat.scrollHeight-divChat.clientHeight;
+        }
+	}
+	function login(){
+		if(tbxUsername.value.trim()==''){alert('请输入用户名');return;}
+		userName = tbxUsername.value.trim();
+		socket = io.connect();
+
+		socket.on('connect',function(){
+			AddMsg("与聊天服务器的连接已经建立。");
+			socket.on('login',function(name){
+				AddMsg("欢迎用户"+name+"加入聊天室。");
+			})
+			socket.on('sendClients',function(names){
+				var divRight = document.getElementById('divRight');
+				var str = "";
+				names.forEach(function(name){str+=name+"</br>"});
+				divRight.innerHTML = "用户列表</br>";
+				divRight.innerHTML+=str;
+			});
+			socket.on('chat',function(data){
+				AddMsg(data.user+ "说："_+data.msg);
+			});
+			socket.on('disconnect',function(){
+				AddMsg("与聊天服务器的连接已断开。");
+				document.getElementById("send").disabled = true;
+				document.getElementById("logout").disabled = true;
+				document.getElementById("login").disabled = "";
+				var divRight = document.getElementById('divRight');
+				divRight.innerHTML = "用户列表";
+			});
+			socket.on('logout',function(name){
+				AddMsg("用户"+name+"已退出聊天室。");
+			});
+			socket.on('duplicate',function(){
+				alert('该用户名已经被使用');
+				document.getElementById("send").disabled = true;
+				document.getElementById("logout").disabled = true;
+				document.getElementById("login").disabled = "";
+
+			});
+		});
+		socket.on('error',function(err){
+			AddMsg("与聊天服务器的连接发生错误。");
+			socket.disconnect();
+			socket.removeAllListeners('connect');
+			io.sockets = {};
+		});
+		socket.emit('login',userName);
+		document.getElementById("send").disabled = "";
+	    document.getElementById("logout").disabled = "";
+		document.getElementById("login").disabled = true;
+	}
+
+	function send(){
+		var msg = tbxMsg.value;
+		if(msg.length>0){
+			socket.emit('chat',{user:userName,msg:msg});
+			tbxMsg.value='';
+		}
+	}
+
+	function logout(){
+		socket.emit('logout',userName);
+		socket.disconnect();
+		socket.removeAllListeners('connect');
+		io.sockets = {};
+		AddMsg("用户"+userName+"已退出聊天室。");
+		var divRight = document.getElementById('divRight');
+		divRight.innerHTML = "用户列表";
+		document.getElementById("send").disabled = "disabled";
+		document.getElementById("logout").disabled = "disabled";
+		document.getElementById("login").disabled = "";
+	}
+	function window_onunload(){
+       socket.emit('logout',userName);
+       socket.disconnet();
+	}
+
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
