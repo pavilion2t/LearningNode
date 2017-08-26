@@ -4,8 +4,10 @@ Koa是一种简单好用的Web框架。
 所有功能都通过插件实现，很符合UNIX哲学
 Node版本要求7.6以上
 
-1 架设HTTP服务
+1 架设HTTP服务     
+```
 //只要三行代码，就可以用Koa架设一个HTTP服务
 const Koa = require('koa');
 const app = new Koa();
-app.listen(3000);
+app.listen(3000);       
+```
