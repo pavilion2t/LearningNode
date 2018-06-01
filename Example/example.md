@@ -1,1 +1,0 @@
-![ABC](../images/hellozhuting.png)  
